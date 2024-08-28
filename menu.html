@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+
+    h1 {
+	font-family: 'Segoe Script', cursive;
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+	  
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .menu-item {
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      background-color: #fff;
+      width: 250px;
+      text-align: center;
+    }
+
+    .menu-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .menu-item h3 {
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .menu-item p {
+      color: #777;
+      margin: 5px 0;
+    }
+
+    .menu-item button {
+      display: block;
+      width: 100%;
+      padding: 8px 0;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .cart {
+      margin-top: 50px;
+    }
+
+    .cart h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .cart-item {
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      background-color: #fff;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      color: #333;
+    }
+
+    .cart-item p {
+      color: #777;
+      margin: 5px 0;
+    }
+
+    .cart-item button {
+      display: inline-block;
+      padding: 3px 8px;
+      background-color: #f44336;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-left: 5px;
+      font-weight: bold;
+    }
+
+    #total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+	
+	.simple-button {
+  background-color: lightblue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+    } 
+
+.simple-button:hover {
+  background-color: skyblue;
+}
+  </style>
+  <script>
+    const selectedItems = [];
+
+    function addToCart(event) {
+      const menuItem = event.target.dataset;
+      const itemName = menuItem.name;
+      const itemPrice = parseFloat(menuItem.price);
+
+      const existingItem = selectedItems.find(item => item.name === itemName);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        selectedItems.push({ name: itemName, price: itemPrice, quantity: 1 });
+      }
+
+      updateCart();
+      calculateTotal();
+    }
+
+    function removeFromCart(itemName) {
+      const existingItem = selectedItems.find(item => item.name === itemName);
+      if (existingItem) {
+        existingItem.quantity -= 1;
+        if (existingItem.quantity === 0) {
+          const index = selectedItems.indexOf(existingItem);
+          selectedItems.splice(index, 1);
+        }
+      }
+
+      updateCart();
+      calculateTotal();
+    }
+
+    function updateCart() {
+      const cart = document.getElementById('cart-items');
+      cart.innerHTML = '';
+
+      selectedItems.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+
+        const itemName = document.createElement('h3');
+        itemName.textContent = item.name;
+
+        const itemPrice = document.createElement('p');
+        itemPrice.textContent = 'Price: Rs. ' + item.price;
+
+        const itemQuantity = document.createElement('p');
+        itemQuantity.textContent = 'Quantity: ' + item.quantity;
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', () => removeFromCart(item.name));
+
+        cartItem.appendChild(itemName);
+        cartItem.appendChild(itemPrice);
+        cartItem.appendChild(itemQuantity);
+        cartItem.appendChild(removeButton);
+
+        cart.appendChild(cartItem);
+      });
+    }
+
+    function calculateTotal() {
+      const totalElement = document.getElementById('total');
+      let total = 0;
+
+      selectedItems.forEach(item => {
+        total += item.price * item.quantity;
+      });
+
+      totalElement.textContent = 'Total: Rs. ' + total.toFixed(2);
+    }
+	function placeOrder() {
+	 window.location.href = "deliver.html";
+    }
+	
+	function goToHomePage() {
+  window.location.href = "home.html"; 
+}
+  </script>
+  
+</head>
+<body>
+<button class="simple-button" onclick="goToHomePage()">Home</button>
+  <h1>Menu</h1>
+
+  <div class="menu">
+    <!-- Indian Cuisine -->
+    <div class="menu-item">
+      <img src="dosa.jpg" alt="Butter Chicken">
+      <h3>Masala Dosa</h3>
+      <p>Price: Rs. 200</p>
+      <button onclick="addToCart(event)" data-name="Masala Dosa" data-price="200">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="batti.jpg" alt="Paneer Tikka">
+      <h3>Dal bati</h3>
+      <p>Price: Rs. 280</p>
+      <button onclick="addToCart(event)" data-name="Dal bati" data-price="280">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="chole-bhature.jpg" alt="Samosa">
+      <h3>Chole Bhature</h3>
+      <p>Price: Rs. 250</p>
+      <button onclick="addToCart(event)" data-name="Chole Bhature" data-price="250">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="traditional_rasmalai_.jpg" alt="Biryani">
+      <h3>Rasmali</h3>
+      <p>Price: Rs. 100</p>
+      <button onclick="addToCart(event)" data-name="Rasmali" data-price="220">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="Shahi-Paneer-1.jpg" alt="Gulab Jamun">
+      <h3>Shahi-Paneer</h3>
+      <p>Price: Rs. 280</p>
+      <button onclick="addToCart(event)" data-name="Shahi-Paneer" data-price="280">Add to Cart</button>
+    </div>
+
+    <!-- Chinese Cuisine -->
+    <div class="menu-item">
+      <img src="\Schezwan-Noodles.avif" alt="Fried Rice">
+      <h3>Schezwan-Noodles</h3>
+      <p>Price: Rs. 180</p>
+      <button onclick="addToCart(event)" data-name="Schezwan-Noodles" data-price="180">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="manchurian.jpg" alt="Manchurian">
+      <h3>Manchurian</h3>
+      <p>Price: Rs. 160</p>
+      <button onclick="addToCart(event)" data-name="Manchurian" data-price="160">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="spring-rolls.jpg" alt="Spring Rolls">
+      <h3>Spring Rolls</h3>
+      <p>Price: Rs. 120</p>
+      <button onclick="addToCart(event)" data-name="Spring Rolls" data-price="120">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="fried rice.jpg" alt="Sweet and Sour Chicken">
+      <h3>Fried-Rice</h3>
+      <p>Price: Rs. 150</p>
+      <button onclick="addToCart(event)" data-name="Fried-Rice" data-price="150">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="veg-momos.jpg" alt="Chow Mein">
+      <h3>Veg-Momos</h3>
+      <p>Price: Rs. 190</p>
+      <button onclick="addToCart(event)" data-name="Veg-Momos" data-price="190">Add to Cart</button>
+    </div>
+
+    <!-- Italian Cuisine -->
+    <div class="menu-item">
+      <img src="bruchetta.jpg" alt="Margherita Pizza">
+      <h3>Bruschetta</h3>
+      <p>Price: Rs. 250</p>
+      <button onclick="addToCart(event)" data-name="Bruschetta" data-price="250">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="pasta.jpg" alt="Pasta">
+      <h3>Pasta</h3>
+      <p>Price: Rs. 180</p>
+      <button onclick="addToCart(event)" data-name="Pasta" data-price="180">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="Classic-Lasagna.jpg"alt="Lasagna">
+      <h3>Lasagna</h3>
+      <p>Price: Rs. 220</p>
+      <button onclick="addToCart(event)" data-name="Lasagna" data-price="220">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="tiramisu.jpg" alt="Tiramisu">
+      <h3>Tiramisu</h3>
+      <p>Price: Rs. 150</p>
+      <button onclick="addToCart(event)" data-name="Tiramisu" data-price="150">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="pizza.jpg" alt="Bruschetta">
+      <h3>Pizza</h3>
+      <p>Price: Rs. 200</p>
+      <button onclick="addToCart(event)" data-name="Bruschetta" data-price="200">Add to Cart</button>
+    </div>
+
+    <!-- Beverages -->
+    <div class="menu-item">
+      <img src="smoothie.jpg" alt="Coke">
+      <h3>Smoothie</h3>
+      <p>Price: Rs. 120</p>
+      <button onclick="addToCart(event)" data-name="Smoothie" data-price="50">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="pina colada.jpg" alt="Iced Tea">
+      <h3>Pina-Colada</h3>
+      <p>Price: Rs. 170</p>
+      <button onclick="addToCart(event)" data-name="Pina-Colada" data-price="170">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="falooda.jpg" alt="Coffee">
+      <h3>Falooda</h3>
+      <p>Price: Rs. 160</p>
+      <button onclick="addToCart(event)" data-name="Falooda" data-price="160">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="grape sode.jpg" alt="Smoothie">
+      <h3>Grape-Soda</h3>
+      <p>Price: Rs. 80</p>
+      <button onclick="addToCart(event)" data-name="Grape-Soda" data-price="80">Add to Cart</button>
+    </div>
+    <div class="menu-item">
+      <img src="Cafe-style-cold-coffee-with-icecream.jpg" alt="Lemonade">
+      <h3>Cold-Coffee</h3>
+      <p>Price: Rs. 140</p>
+      <button onclick="addToCart(event)" data-name="Cold-Coffee" data-price="140">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="cart">
+    <h1>Cart</h1>
+    <div id="cart-items"></div>
+    <p id="total">Total: Rs. 0.00</p>
+  </div>
+  <center>
+  <button class="simple-button" onclick="placeOrder()">Place Order</button></center>
+</body>
+</html>
